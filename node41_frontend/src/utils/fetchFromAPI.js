@@ -49,3 +49,23 @@ export const getVideoPageAPI = async (page) => {
 
   return data.data // =>{listVideo, totalPage}
 }
+
+
+export const getVideoDetailAPI = async (videoId) => {
+  const { data } = await axios.get(`${BASE_URL}/video/get-video-detail/${videoId}`)
+
+  return data.data // =>{listVideo, totalPage}
+}
+
+export const signUpAPI = async (model) => {
+  const { data } = await axios.post(`${BASE_URL}/user/sign-up`, model);
+
+  return data // {code,data,message,date}
+}
+
+
+export const loginAPI = async (model) => {
+  const { data } = await axios.post(`${BASE_URL}/user/login`, model);
+
+  return data // {code,data,message,date}
+}
