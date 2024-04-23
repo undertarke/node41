@@ -3,6 +3,7 @@ import Video from "../models/video.js";
 import initModels from "../models/init-models.js";
 import sequelize from "../models/connect.js";
 import { response } from "../config/response.js";
+import { decodeToken } from "../config/jwt.js";
 
 const model = initModels(sequelize)
 
@@ -120,6 +121,47 @@ const getVideoDetail = async (req, res) => {
 }
 
 
+const getComment = async (req, res) => {
+
+    let { videoId } = req.params;
+
+    let data = await model.video_comment.findAll({
+        where: {
+            video_id: videoId
+        },
+        include: ["user", "video"],
+        order: [
+            ["date_create", "DESC"]
+        ]
+
+    });
+
+    response(res, data, "Thành công", 200)
+}
+
+const createComment = async (req, res) => {
+    let { videoId, content } = req.body
+
+    let { token } = req.headers;
+    let { data } = decodeToken(token)
+
+    // liên quan đến datetime => lấy từ server => BE
+    let dateComment = new Date();
+
+    let newData = {
+        user_id: data.userId,
+        video_id: videoId,
+        content: content,
+        date_create: dateComment
+    }
+
+    await model.video_comment.create(newData);
+
+    response(res, "", "Bình luận thành", 200)
+
+
+}
+
 export {
     getVideo,
     createVideo,
@@ -127,5 +169,7 @@ export {
     getVideoType,
     getVideoWithType,
     getVideoPage,
-    getVideoDetail
+    getVideoDetail,
+    getComment,
+    createComment
 }
