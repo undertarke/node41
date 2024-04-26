@@ -7,6 +7,7 @@ import InfoUser from "./components/InfoUser";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Footer from "./components/Footer";
+import Forget from "./components/Forget";
 
 const App = () => (
   <BrowserRouter>
@@ -24,6 +25,8 @@ const App = () => (
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/search/:searchTerm' element={<SearchFeed />} />
+
+        <Route path='/forget' element={<Forget />} />
       </Routes>
       <Footer />
     </Box>

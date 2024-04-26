@@ -93,6 +93,31 @@ export const commentAPI = async (model) => {
 
 
 
+export const loginFacebookAPI = async (model) => {
+  const { data } = await axios.post(`${BASE_URL}/user/login-facebook`, model, options);
+
+  return data // {code,data,message,date}
+}
+
+
+
+
+export const checkForgetEmailAPI = async (model) => {
+  const { data } = await axios.post(`${BASE_URL}/user/forget-check-mail`, model, options);
+
+  return data // {code,data,message,date}
+}
+
+
+
+export const checkForgetCodelAPI = async (model) => {
+  const { data } = await axios.post(`${BASE_URL}/user/forget-check-code`, model, options);
+
+  return data // {code,data,message,date}
+}
+
+
+
 
 
 
@@ -110,7 +135,7 @@ axios.interceptors.response.use(
   ,
   function (error) {
 
-    console.log(error.response)
+    // console.log(error.response)
     if (error.response.status == 401 && error.response.data == "TokenExpiredError") {
       // API reste token
       axios.post(`${BASE_URL}/user/reset-token`, null, options).then(result => {

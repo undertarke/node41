@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 // tạo token
 export const createToken = (data) => {
-    return jwt.sign({ data: data }, "BI_MAT", { expiresIn: "5s" })
+    return jwt.sign({ data: data }, "BI_MAT", { expiresIn: "5y" })
 }
 
 

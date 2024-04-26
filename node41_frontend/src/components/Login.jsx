@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Box, CardMedia } from "@mui/material";
 
 import { Videos, ChannelCard } from ".";
-import { loginAPI } from "../utils/fetchFromAPI";
+import { loginAPI, loginFacebookAPI } from "../utils/fetchFromAPI";
+import ReactFacebookLogin from "react-facebook-login";
 
 
 
@@ -16,7 +17,7 @@ const Login = () => {
   useEffect(() => {
 
   }, []);
-
+  const navigate = useNavigate();
   return <div className="p-5 " style={{ minHeight: "100vh" }}>
     <div className=" d-flex justify-content-center">
       <form className="row g-3 text-white">
@@ -49,12 +50,35 @@ const Login = () => {
 
             }).catch(error => {
 
-              alert(error.message)
+              alert(error.response.data.message)
 
             })
           }}>Login</button>
-
+          <a className="text-primary" href="#" onClick={() => navigate("/forget")}> Forget password</a>
         </div>
+
+        <ReactFacebookLogin
+          appId="797783445614267"
+
+          fields="name,email,picture"
+
+          callback={(response) => {
+
+            console.log(response)
+            // call API login facebook
+            let model = {
+              userID: response.userID,
+              email: response.email,
+              name: response.name
+            }
+            loginFacebookAPI(model).then(result => {
+              alert("Login thành công")
+
+              localStorage.setItem("LOGIN_USER", result.data)
+              window.location.reload()
+            })
+
+          }} />
       </form>
     </div>
   </div>

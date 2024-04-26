@@ -1,6 +1,6 @@
 // Nơi định nghĩa API
 import express from 'express'
-import { getUser, login, resetToken, signUp } from '../controllers/userController.js'
+import { getUser, login, resetToken, signUp, loginFacebook, forgetCheckMail, forgetCheckCode } from '../controllers/userController.js'
 
 const userRouter = express.Router()
 
@@ -13,6 +13,16 @@ userRouter.post("/login", login)
 
 // API reset token
 userRouter.post("/reset-token", resetToken)
+
+// API login facebook
+userRouter.post("/login-facebook", loginFacebook)
+
+// API check mail => forget password
+userRouter.post("/forget-check-mail",forgetCheckMail)
+
+// API check CODE =>  forget password
+userRouter.post("/forget-check-code",forgetCheckCode)
+
 
 export default userRouter
 
