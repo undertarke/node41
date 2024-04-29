@@ -6,12 +6,13 @@ import { Videos, ChannelCard } from ".";
 
 import ReactPlayer from "react-player";
 import { DOMAIN_BE_IMG } from "../utils/constants";
+import { BASE_URL_IMG, uploadAvatarAPI, uploadCloudAPI } from "../utils/fetchFromAPI";
 
 const InfoUser = () => {
   const [channelDetail, setChannelDetail] = useState();
   const [videos, setVideos] = useState(null);
 
-  const [avatar, setAvatar] = useState("http://dergipark.org.tr/assets/app/images/buddy_sample.png");
+  const [avatar, setAvatar] = useState(`${BASE_URL_IMG}/1714398303016-468302619_cat.jpeg`);
 
   const { id } = useParams();
 
@@ -33,9 +34,46 @@ const InfoUser = () => {
       <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabIndex={0}>
         <div className="row">
           <div className="col-2">
+
             <img className="rounded-circle" src={avatar} width="100%" />
 
-            <input className="form-control" type="file" id="formFile" />
+            <input multiple className="form-control" type="file" id="formFile"
+
+              onChange={() => {
+
+                let value = document.querySelector("#formFile").files[0];
+
+                let files = document.querySelector("#formFile").files;
+
+                // upload multiple file
+                let lstFormData = new FormData();
+                for (let index = 0; index < files.length; index++) {
+
+                  lstFormData.append("avatar", files[index])
+                }
+
+                //upload single
+                // let formData = new FormData();
+                // formData.append("avatar", value);
+
+
+
+                uploadAvatarAPI(lstFormData).then(result => {
+                  console.log(result)
+                  setAvatar(`http://localhost:8080/public/img/1714398303016-468302619_cat.jpeg`)
+                })
+
+                // cloudinary
+                // formData.append("file", value);
+                // formData.append("upload_preset", "lsdevmuq")
+                // uploadCloudAPI(formData).then(result => {
+                //   console.log(result)
+                // })
+
+
+              }}
+
+            />
 
           </div>
           <div className=" col-10">

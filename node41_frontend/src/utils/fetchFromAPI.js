@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export const BASE_URL = 'http://localhost:8080';
+export const BASE_URL_IMG = 'http://localhost:8080/public/img';
 
 const options = {
   params: {
@@ -117,8 +118,18 @@ export const checkForgetCodelAPI = async (model) => {
 }
 
 
+export const uploadCloudAPI = async (formData) => {
+  const { data } = await axios.post(`https://api.cloudinary.com/v1_1/dghvdbogx/upload`, formData)
+
+  return data;
+}
 
 
+export const uploadAvatarAPI = async (formData) => {
+  const { data } = await axios.post(`${BASE_URL}/user/upload-avatar`, formData, options);
+
+  return data // {code,data,message,date}
+}
 
 
 
