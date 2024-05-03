@@ -27,20 +27,64 @@ userRouter.post("/forget-check-code", forgetCheckCode)
 
 // File system
 import fs from 'fs'
+import compress_images from 'compress-images'
+
+// yarn add compress-images
+// yarn add pngquant-bin@6.0.1
+// yarn add  gifsicle@5.2.1 
+
+// image > 900Kb
 
 // API upload avatar
 userRouter.post("/upload-avatar", upload.single("avatar"), (req, res) => {
 
+
+    let file = req.file;
+
+    // đường dẫn hình cần tối ưu
+    let input = process.cwd() + "/public/img/" + file.filename;
+
+    // đường dẫn hình đã được tối ưu
+    let output = process.cwd() + "/public/file/";
+    
+    compress_images(input, output,
+
+        { compress_force: false, statistic: true, autoupdate: true }, false,
+
+        { jpg: { engine: "mozjpeg", command: ["-quality", "15"] } },
+
+        { png: { engine: "pngquant", command: ["--quality=20-50", "-o"] } },
+        { svg: { engine: "svgo", command: "--multipass" } },
+        { gif: { engine: "gifsicle", command: ["--colors", "64", "--use-col=web"] } },
+
+        function (error, completed, statistic) {
+
+            // xóa hình chưa tối ưu
+
+            console.log("-------------");
+            console.log(error);
+            console.log(completed);
+            console.log(statistic);
+            console.log("-------------");
+        }
+    );
+
+    res.send("OK")
+
+
+
+
+
+
     // tạo file tên data.txt => hello node41
     // fs.writeFile(process.cwd() + "/data.txt", "hello node41", (err) => { })
 
-    let file = req.file;
-    fs.readFile(process.cwd() + "/public/img/" + file.filename, (err, data) => {
-        let base64 = Buffer.from(data).toString("base64");
+    // fs.readFile(process.cwd() + "/public/img/" + file.filename, (err, data) => {
+    //     let base64 = Buffer.from(data).toString("base64");
 
-        res.send(base64);
-       
-    })
+    //     res.send(base64);
+
+    // })
 
 
 

@@ -38,3 +38,57 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
 
 
 
+
+// B1: yarn add prisma @prisma/client
+
+// B2: yarn prisma init
+
+// B3: Update lại chuỗi kết nối CSDL trong .env và file schema.prisma
+
+// B4: Database First => yarn prisma db pull
+
+// B5: yarn prisma generate
+
+import { PrismaClient } from '@prisma/client'
+let model = new PrismaClient();
+
+app.get("/get-video", async (req, res) => {
+
+    let id = 2
+
+    // SELECT * FROM video
+    // findAll()
+    // findOne()
+    let data = await model.video.findFirst({
+        where: {
+            video_id: id
+        },
+        include: {
+            video_comment: {
+                include: {
+                    users: true
+                }
+            }
+        }
+    });
+
+    // sequelize : .destroy()
+    // prisma: model.video.delete()
+
+    // sequelize => video.create({video_id ,video_name,thumbnail,...})
+
+    // prisma
+    // model.video.create(
+    //     {
+    //         data: { video_id, video_name, thumbnail }
+    //     }
+    // )
+
+    // model.video.update({
+    //     data: { video_id, video_name, thumbnail },
+    //     where: {}
+    // })
+
+    res.send(data)
+
+})
