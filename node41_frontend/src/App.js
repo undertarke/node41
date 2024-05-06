@@ -8,15 +8,18 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Footer from "./components/Footer";
 import Forget from "./components/Forget";
+import DemoSocket from "./components/DemoSocket";
 
 const App = () => (
   <BrowserRouter>
     <Box sx={{ backgroundColor: '#000' }}>
       <Navbar />
       <Routes>
+        <Route exact path='/socket' element={<DemoSocket />} />
+
         <Route exact path='/' element={<Feed />} />
         <Route exact path='/:page' element={<Feed />} />
-        
+
         <Route exact path='/videoType/:id' element={<Feed />} />
 
         <Route path='/video/:id' element={<VideoDetail />} />
@@ -28,7 +31,7 @@ const App = () => (
 
         <Route path='/forget' element={<Forget />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   </BrowserRouter>
 );

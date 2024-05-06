@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const BASE_URL = 'http://localhost:8080';
+export const BASE_URL = 'http://192.168.1.12:8080';
 export const BASE_URL_IMG = 'http://localhost:8080/public/img';
 
 const options = {
@@ -129,6 +129,16 @@ export const uploadAvatarAPI = async (formData) => {
   const { data } = await axios.post(`${BASE_URL}/user/upload-avatar`, formData, options);
 
   return data // {code,data,message,date}
+}
+
+
+// get API user 
+
+// API get comment
+export const getUserAPI = async () => {
+  const { data } = await axios.get(`${BASE_URL}/user/get-all-user/`, options)
+
+  return data 
 }
 
 

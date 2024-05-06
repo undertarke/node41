@@ -50,41 +50,30 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
 // B5: yarn prisma generate
 
 import { PrismaClient } from '@prisma/client'
-let model = new PrismaClient();
+let prisma = new PrismaClient();
 
-app.get("/get-video", async (req, res) => {
+app.get("/user/get-all-user", async (req, res) => {
 
     let id = 2
 
     // SELECT * FROM video
     // findAll()
     // findOne()
-    let data = await model.video.findFirst({
-        where: {
-            video_id: id
-        },
-        include: {
-            video_comment: {
-                include: {
-                    users: true
-                }
-            }
-        }
-    });
+    let data = await prisma.users.findMany();
 
     // sequelize : .destroy()
-    // prisma: model.video.delete()
+    // prisma: prisma.video.delete()
 
     // sequelize => video.create({video_id ,video_name,thumbnail,...})
 
     // prisma
-    // model.video.create(
+    // prisma.video.create(
     //     {
     //         data: { video_id, video_name, thumbnail }
     //     }
     // )
 
-    // model.video.update({
+    // prisma.video.update({
     //     data: { video_id, video_name, thumbnail },
     //     where: {}
     // })
@@ -92,3 +81,95 @@ app.get("/get-video", async (req, res) => {
     res.send(data)
 
 })
+
+
+
+
+
+// yarn add socket.io
+
+import { createServer } from "http";
+import { Server } from "socket.io";
+
+const httpServer = createServer(app);
+
+
+// đối tượng socket server
+const io = new Server(httpServer, {
+    cors: {
+        origin: "*"
+    }
+});
+
+// lắng nghe key: connection => khi client kết nối vào server
+io.on("connection", (socket) => {
+
+    // app chat
+    // 6-8
+    socket.on("join-room", async (roomId) => {
+
+        // leave all room
+        socket.rooms.forEach(roomId => socket.leave(roomId))
+
+        socket.join(roomId)
+
+        // lấy lịch sử chat
+        let lstChat = await prisma.chat.findMany({
+            where: {
+                room_id: roomId
+            }
+        })
+
+        io.to(roomId).emit("load-chat", lstChat)
+
+    })
+
+
+    // { userId, txtChat }
+    socket.on("send-mess", async (data) => {
+
+        let newChat = {
+            user_id: data.userId,
+            content: data.txtChat,
+            room_id: data.roomId,
+            date: new Date()
+        }
+
+        await prisma.chat.create({ data: newChat })
+
+        io.to(data.roomId).emit("mess-server", data)
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+    // // add vào room => room key
+    // socket.join("room-1")
+
+    // // xử lý các sự kiện liên quan đến realtime
+
+    // // key , value
+    // // chỉ có client nào gửi thì client đó nhận
+    // // socket.emit("send-data", socket.id)
+
+    // // toàn bộ client nhận
+    // io.to("room-1").to("room-2").emit("send-data", socket.id)
+
+    // socket.on("client-data", (data) => {
+    //     console.log(data)
+    // })
+
+
+});
+
+
+// port dành cho socket.io
+httpServer.listen(8081);

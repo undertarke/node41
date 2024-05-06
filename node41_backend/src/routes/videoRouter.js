@@ -12,10 +12,10 @@ import { checkToken, verifyToken } from '../config/jwt.js';
 
 const videoRouter = express.Router()
 
-videoRouter.get("/get-video", verifyToken, getVideo)
+videoRouter.get("/get-video", getVideo)
 
 // API get video page
-videoRouter.get("/get-video-page/:page", verifyToken, getVideoPage)
+videoRouter.get("/get-video-page/:page", getVideoPage)
 
 
 videoRouter.post("/create-video", createVideo)
