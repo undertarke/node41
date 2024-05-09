@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const BASE_URL = 'http://192.168.1.12:8080';
+export const BASE_URL = 'http://localhost:8080';
 export const BASE_URL_IMG = 'http://localhost:8080/public/img';
 
 const options = {
