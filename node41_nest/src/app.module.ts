@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { VideoModule } from './video/video.module';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
-  imports: [VideoModule],
+  imports: [VideoModule, ConfigModule.forRoot({ isGlobal: true }), AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

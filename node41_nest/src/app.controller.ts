@@ -1,22 +1,47 @@
 import { Body, Controller, Get, HttpCode, Param, Query, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request } from 'express';
+import { ApiBody, ApiParam, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
 
-type userType = {
-  email: string,
+class userType {
+
+  @ApiProperty()
+  email: string
+
+  @ApiProperty()
   name: string
 }
 
+
+
+
+@ApiTags("app")
 @Controller("/app")
 export class AppController {
 
   constructor(private readonly appService: AppService) { }
 
   // enpoint: 
+  @ApiParam({
+    name: "id"
+  })
+  @ApiQuery({
+    name: "email"
+  })
+  @ApiBody({
+    type: userType
+  })
   @Get()
-  getHello(): string {
+  getHello(@Req() req: Request): string {
+
+    let { id } = req.params
+    let { email } = req.query;
+
     return this.appService.getHello();
   }
+
+
+
 
   // GET
   // endpoint: /app/demo

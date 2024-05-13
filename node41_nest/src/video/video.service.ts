@@ -1,15 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { CreateVideoDto } from './dto/create-video.dto';
 import { UpdateVideoDto } from './dto/update-video.dto';
+import { PrismaClient, video, video_type } from '@prisma/client';
+import { VideoType } from './entities/video.entity';
+import { ConfigService } from '@nestjs/config';
+
+
 
 @Injectable()
 export class VideoService {
+
+  constructor(private configService: ConfigService) { }
+
+  prisma = new PrismaClient()
+
   create(createVideoDto: CreateVideoDto) {
     return 'This action adds a new video';
   }
 
-  findAll() {
-    return `This action returns all video`;
+  async findAll(): Promise<video[]> {
+    let data: video[] = await this.prisma.video.findMany();
+
+
+    return this.configService.get("TITLE");
   }
 
   findOne(id: number) {
