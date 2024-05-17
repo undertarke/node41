@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UploadedFiles, UseGuards, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UploadedFiles, UseGuards, HttpCode, Req, Headers } from '@nestjs/common';
 import { VideoService } from './video.service';
 import { CreateVideoDto } from './dto/create-video.dto';
 import { FileUploadDto, FilesUploadDto, UpdateVideoDto } from './dto/update-video.dto';
@@ -6,9 +6,12 @@ import { VideoType } from './entities/video.entity';
 import { video } from '@prisma/client';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiHeader, ApiHeaders, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
-
+@ApiBearerAuth()
+@UseGuards(AuthGuard("jwt"))
 @ApiTags("video")
 @Controller('video')
 export class VideoController {
@@ -20,11 +23,19 @@ export class VideoController {
     return this.videoService.create(createVideoDto);
   }
 
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard("jwt"))
   @HttpCode(200)
   @Get("/get-video")
-  findAll(): Promise<video[]> {
+  findAll(@Req() req: Request) {
+
+    let data = req.user;
+
+    
     return this.videoService.findAll();
   }
+
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

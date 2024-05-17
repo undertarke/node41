@@ -6,6 +6,7 @@ import { ApiBody, ApiParam, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagg
 class userType {
 
   @ApiProperty()
+  // IsEmail()
   email: string
 
   @ApiProperty()

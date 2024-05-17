@@ -21,7 +21,7 @@ export class VideoService {
   async findAll(): Promise<video[]> {
     let data: video[] = await this.prisma.video.findMany();
 
-
+    return data;
     return this.configService.get("TITLE");
   }
 

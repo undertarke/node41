@@ -11,7 +11,7 @@ async function bootstrap() {
 
   // yarn add @nestjs/swagger swagger-ui-express
 
-  const config = new DocumentBuilder().setTitle("NestJS Swagger").build();
+  const config = new DocumentBuilder().setTitle("NestJS Swagger").addBearerAuth().build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("/swagger", app, document);
 
