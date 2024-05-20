@@ -31,7 +31,7 @@ const App = () => (
 
         <Route path='/forget' element={<Forget />} />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </Box>
   </BrowserRouter>
 );

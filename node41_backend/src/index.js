@@ -103,7 +103,7 @@ const io = new Server(httpServer, {
 
 // lắng nghe key: connection => khi client kết nối vào server
 io.on("connection", (socket) => {
-
+    
     // app chat
     // 6-8
     socket.on("join-room", async (roomId) => {

@@ -5,7 +5,14 @@ import { getUserAPI } from '../utils/fetchFromAPI';
 
 import { io } from 'socket.io-client'
 
-const socket = io("ws://localhost:8081");
+const socket = io("http://localhost:8081");
+
+socket.on('connect', () => {
+    console.log('Connected to server');
+});
+socket.on('disconnect', () => {
+    console.log('Disconnected from server');
+});
 
 const Footer = () => {
 
